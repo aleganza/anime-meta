@@ -1,0 +1,44 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of go build
+/bin/
+/build/
+
+# Coverage
+*.out
+coverage.*
+
+# Go workspace
+go.work
+
+# Dependency/vendor (se non vuoi versionare vendor)
+/vendor/
+
+# Environment variables
+.env
+.env.*
+
+mock*.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp

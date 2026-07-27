@@ -1,0 +1,5 @@
+package tvdb
+
+func authorize() {
+	
+}
