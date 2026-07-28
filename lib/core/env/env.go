@@ -2,18 +2,19 @@ package env
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func Init() {
 	if err := godotenv.Load(); err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }
 
 func GetVar(name string) (string, error) {
-
 	value, exists := os.LookupEnv(name)
 
 	if !exists {
