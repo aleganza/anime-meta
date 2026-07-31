@@ -1,40 +1,31 @@
 package tvdb
 
 import (
+	"anime-meta/lib/core/fetch"
 	"fmt"
-	"io"
-	"net/http"
 )
 
-func (c *Client) getSeries(id string) (string, error) {
-	req, err := c.AuthenticatedHttpRequest("GET", BaseURL+"/series/"+id+"/episodes/default/eng", nil)
-
+func (c *Client) getSeries(id string) (any, error) {
+	resp, err := c.TvdbAuthenticatedFetch("GET", BaseURL+"/series/"+id+"/episodes/default/eng", nil)
 	if err != nil {
 		return "", err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	var seriesResp map[string]any
 
+	fetch.ExtractResponseJsonBody(resp, &seriesResp)
 	if err != nil {
 		return "", err
 	}
 
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-
-	if err != nil { 
-		return "", err
-	}
-
-	return string(body), nil
+	return seriesResp, nil
 }
 
 // func (c *Client) getMovie(id string) (string, error) {
 
 // }
 
-func (c *Client) GetMedia(id string, kind string) (string, error) {
+func (c *Client) GetMedia(id string, kind string) (any, error) {
 	if kind == "series" {
 		return c.getSeries(id)
 	}
@@ -43,5 +34,5 @@ func (c *Client) GetMedia(id string, kind string) (string, error) {
 	// 	return c.getMovie(id)
 	// }
 
-	return "", fmt.Errorf(`wrong "kind" value passed`)
+	return nil, fmt.Errorf(`wrong "kind" value passed`)
 }

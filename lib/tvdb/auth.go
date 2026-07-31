@@ -2,6 +2,7 @@ package tvdb
 
 import (
 	"anime-meta/lib/core/env"
+	"anime-meta/lib/core/fetch"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -21,21 +22,15 @@ func login() (string, error) {
 
 	resp, err := http.Post(BaseURL+"/login", "application/json", bytes.NewReader(body))
 	if err != nil {
-		return "", fmt.Errorf("tvdb login http call error: %w", err)
+		return "", fmt.Errorf("tvdb login request error: %w", err)
 	}
-
-	defer resp.Body.Close()
 
 	var loginResp LoginResponse
 
-	err = json.NewDecoder(resp.Body).Decode(&loginResp)
+	fetch.ExtractResponseJsonBody(resp, &loginResp)
 	if err != nil {
 		return "", fmt.Errorf("tvdb login body parsing error: %w", err)
 	}
-
-	// if err := json.NewDecoder(resp.Body).Decode(&loginResp); err != nil {
-	// 	return "", fmt.Errorf("tvdb login body parsing error: %w", err)
-	// }
 
 	return loginResp.Data.Token, nil
 }
