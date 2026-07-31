@@ -2,37 +2,36 @@ package tvdb
 
 import (
 	"anime-meta/lib/core/fetch"
-	"fmt"
 )
 
-func (c *Client) getSeries(id string) (any, error) {
+func (c *Client) FetchSeries(id string) (TvdbSeriesResponse, error) {
 	resp, err := c.TvdbAuthenticatedFetch("GET", BaseURL+"/series/"+id+"/episodes/default/eng", nil)
 	if err != nil {
-		return "", err
+		return TvdbSeriesResponse{}, err
 	}
 
-	var seriesResp map[string]any
+	var seriesResp TvdbSeriesResponse
 
 	fetch.ExtractResponseJsonBody(resp, &seriesResp)
 	if err != nil {
-		return "", err
+		return TvdbSeriesResponse{}, err
 	}
 
 	return seriesResp, nil
 }
 
-// func (c *Client) getMovie(id string) (string, error) {
-
-// }
-
-func (c *Client) GetMedia(id string, kind string) (any, error) {
-	if kind == "series" {
-		return c.getSeries(id)
+func (c *Client) FetchMovie(id string) (TvdbMovieResponse, error) {
+	resp, err := c.TvdbAuthenticatedFetch("GET", BaseURL+"/movies/"+id+"/extended?short=false", nil)
+	if err != nil {
+		return TvdbMovieResponse{}, err
 	}
 
-	// if kind == "movie" {
-	// 	return c.getMovie(id)
-	// }
+	var movieResp TvdbMovieResponse
 
-	return nil, fmt.Errorf(`wrong "kind" value passed`)
+	fetch.ExtractResponseJsonBody(resp, &movieResp)
+	if err != nil {
+		return TvdbMovieResponse{}, err
+	}
+
+	return movieResp, nil
 }

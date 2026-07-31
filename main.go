@@ -15,12 +15,18 @@ func main() {
 		return
 	}
 
-	media, err := client.GetMedia("252322", "series")
+	// series, err := client.FetchSeries("252322")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
+	movie, err := client.FetchMovie("791")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(media)
+	// fmt.Println(series)
+	fmt.Println(movie)
 }

@@ -2,6 +2,7 @@ package fetch
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -10,6 +11,11 @@ func Do(req *http.Request) (*http.Response, error) {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode >= 400 {
+		defer resp.Body.Close()
+		return nil, fmt.Errorf("request to %s failed: %s", req.URL, resp.Status)
 	}
 	return resp, nil
 }
