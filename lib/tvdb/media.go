@@ -4,34 +4,29 @@ import (
 	"anime-meta/lib/core/fetch"
 )
 
-func (c *Client) FetchSeries(id string) (TvdbSeriesResponse, error) {
-	resp, err := c.TvdbAuthenticatedFetch("GET", BaseURL+"/series/"+id+"/episodes/default/eng", nil)
+func fetchWrapper[T any](c *Client, url string) (T, error) {
+	var out T
+
+	resp, err := c.TvdbAuthenticatedFetch("GET", url, nil)
 	if err != nil {
-		return TvdbSeriesResponse{}, err
+		return out, err
 	}
 
-	var seriesResp TvdbSeriesResponse
-
-	fetch.ExtractResponseJsonBody(resp, &seriesResp)
-	if err != nil {
-		return TvdbSeriesResponse{}, err
+	if err := fetch.ExtractResponseJsonBody(resp, &out); err != nil {
+		return out, err
 	}
 
-	return seriesResp, nil
+	return out, nil
 }
 
-func (c *Client) FetchMovie(id string) (TvdbMovieResponse, error) {
-	resp, err := c.TvdbAuthenticatedFetch("GET", BaseURL+"/movies/"+id+"/extended?short=false", nil)
-	if err != nil {
-		return TvdbMovieResponse{}, err
-	}
+func (c *Client) FetchSeriesExtended(id string) (TvdbSeriesExtendedResponse, error) {
+	return fetchWrapper[TvdbSeriesExtendedResponse](c, BaseURL+"/series/"+id+"/extended?meta=translations&short=false")
+}
 
-	var movieResp TvdbMovieResponse
+func (c *Client) FetchSeriesEpisodes(id string) (TvdbSeriesEpisodesResponse, error) {
+	return fetchWrapper[TvdbSeriesEpisodesResponse](c, BaseURL+"/series/"+id+"/episodes/default/eng")
+}
 
-	fetch.ExtractResponseJsonBody(resp, &movieResp)
-	if err != nil {
-		return TvdbMovieResponse{}, err
-	}
-
-	return movieResp, nil
+func (c *Client) FetchMovieExtended(id string) (TvdbMovieResponse, error) {
+	return fetchWrapper[TvdbMovieResponse](c, BaseURL+"/movies/"+id+"/extended?meta=translations&short=false")
 }

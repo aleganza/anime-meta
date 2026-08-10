@@ -4,10 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
+type Json map[string]any
+
 func Do(req *http.Request) (*http.Response, error) {
+	log.Printf("%s %s", req.Method, req.URL)	
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err

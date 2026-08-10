@@ -1,7 +1,7 @@
 package media
 
 type Media struct {
-	Titles      map[string]string
+	Titles Titles
 	// Episodes    map[string]Episode
 	// EpisodeCount int
 	// SpecialCount int
@@ -9,9 +9,9 @@ type Media struct {
 	// Mappings    Mappings
 }
 
+type Titles map[string]string
+
 type Episode struct {
-	TvdbShowID             int
-	TvdbID                int
 	SeasonNumber          int
 	EpisodeNumber         int
 	AbsoluteEpisodeNumber int
@@ -38,7 +38,7 @@ type Episode struct {
 
 type Image struct {
 	CoverType string
-	URL        string
+	URL       string
 }
 
 type Mappings struct {
@@ -47,15 +47,15 @@ type Mappings struct {
 	MalID         int
 	Type          string
 
-	AnilistID    int
-	AnisearchID  int
-	AnidbID      int
+	AnilistID   int
+	AnisearchID int
+	AnidbID     int
 
 	NotifymoeID *int
 
 	LivechartID int
 
-	TheTVDBID int
-	IMDBID    string
+	TheTVDBID    int
+	IMDBID       string
 	TheMovieDBID string
 }

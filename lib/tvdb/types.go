@@ -13,7 +13,7 @@ type LoginResponse struct {
 	}
 }
 
-// === SERIES ===
+// === MEDIA ===
 
 type Alias struct {
 	Language string
@@ -27,16 +27,55 @@ type MediaStatus struct {
 	KeepUpdated bool
 }
 
-type TvdbSeriesResponse struct {
+type Translation struct {
+	Language  string
+	Name      string
+	Overview  string
+	IsPrimary bool
+	IsAlias   bool
+	Aliases   []string
+}
+
+type Translations struct {
+	NameTranslations     []Translation
+	OverviewTranslations []Translation
+}
+
+type Artwork struct {
+	Id           uint
+	Image        string
+	Thumbnail    string
+	Language     string
+	Type         uint
+	Score        float64
+	Width        uint
+	Height       uint
+	IncludesText bool
+}
+
+type Episode struct {
+	Id             uint
+	SeriesId       uint
+	Name           string
+	Aired          string
+	Runtime        *uint
+	Overview       string
+	Image          string
+	Number         uint
+	SeasonNumber   uint
+	AbsoluteNumber uint
+	Year           string
+}
+
+type TvdbSeriesExtendedResponse struct {
 	Status string
 	Data   struct {
-		Id                   uint
-		Name                 string
-		Slug                 string
-		Image                string
-		NameTranslations     []string
-		OverviewTranslations []string
-		Aliases              []Alias
+		Id           uint
+		Name         string
+		Slug         string
+		Image        string
+		Translations Translations
+		Aliases      []Alias
 
 		FirstAired string
 		LastAired  string
@@ -51,35 +90,34 @@ type TvdbSeriesResponse struct {
 
 		AverageRuntime uint
 
-		Episodes []struct {
-			Id             uint
-			SeriesId       uint
-			Name           string
-			Aired          string
-			Runtime        *uint
-			Overview       string
-			Image          string
-			Number         uint
-			SeasonNumber   uint
-			AbsoluteNumber uint
-			Year           string
-		}
+		Artworks []Artwork
+		Episodes []Episode
 
 		Overview string
 		Year     string
 	}
 }
 
+type TvdbSeriesEpisodesResponse struct {
+	Status string
+	Data   struct {
+		Series struct {
+			Id   uint
+			Name string
+		}
+		Episodes []Episode
+	}
+}
+
 type TvdbMovieResponse struct {
 	Status string
 	Data   struct {
-		Id                   uint
-		Name                 string
-		Slug                 string
-		Image                string
-		NameTranslations     []string
-		OverviewTranslations []string
-		Aliases              []Alias
+		Id           uint
+		Name         string
+		Slug         string
+		Image        string
+		Translations Translations
+		Aliases      []Alias
 
 		Score   uint
 		Runtime uint
@@ -116,6 +154,8 @@ type TvdbMovieResponse struct {
 			Id   uint
 			Name string
 		}
+
+		Artworks []Artwork
 
 		Budget    string
 		BoxOffice string
